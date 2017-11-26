@@ -16,39 +16,53 @@ Tesseract OCR and OpenCV use the second method. But the captcha is more and more
 # Generate the captcha to train
 Acquire massive capthca by hunman is unrealistic. Fortunately, we can easily generate the captcha by the python package **captcha**.See the [get_train_set.py](https://github.com/scnuhealthy/cnn_keras_captcha/blob/master/code/get_train_set.py) in details.
 
-# Build the cnn model
-I build the network with [keras](https://github.com/fchollet/keras), using the theano backend. I think use keras raher than theano to code is much more convenient.     
-The network includes three convolution layers and two full-connected layers. Owing to CNN needs a large amount of samples to train, with the limitation of time and resources, I only use digital number as the char set of the captcha. So output of the model has 4*10 numbers, while is will have 4*62 numbers if the char set includes ppercase and lowercase letters.
+# Build the cnn model with tensorflow
+I have another [project](https://github.com/scnuhealthy/cnn_keras_captcha) to achieve this with keras. In this project, I use tensorflow, for its scalability and prospect. The network includes two convolution layers and two full-connected layers. The charset includes digital numbers and the alphabet(only lowercase letters).
 ```python
-# 3 conv layer
-model.add(Conv2D(nb_filters1, (kernel_size[0], kernel_size[1]), padding='valid', input_shape=input_shape))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=pool_size))
-model.add(Dropout(0.25))
+# First convolutional layer - maps one grayscale image to 32 feature maps.
+with tf.name_scope('conv1'):
+W_conv1 = weight_variable([kernel_size[0], kernel_size[1], 1, nb_filters[0]])
+b_conv1 = bias_variable([nb_filters[0]])
+h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)
 
-model.add(Conv2D(nb_filters2, (kernel_size[0], kernel_size[1])))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=pool_size))
-model.add(Dropout(0.25))
+# Pooling layer - downsamples by 2X.
+with tf.name_scope('pool1'):
+h_pool1 = max_pool_2x2(h_conv1)
 
-model.add(Conv2D(nb_filters3, (kernel_size[0], kernel_size[1])))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=pool_size))
-model.add(Dropout(0.25))
+# Second convolutional layer -- maps 32 feature maps to 64.
+with tf.name_scope('conv2'):
+W_conv2 = weight_variable([3, 3, nb_filters[0], nb_filters[1]])
+b_conv2 = bias_variable([nb_filters[1]])
+h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)
 
-# Fully connected layer
-model.add(Flatten())
-model.add(Dense(1024*MAX_CAPTCHA))
-model.add(Dense(512*MAX_CAPTCHA))
-model.add(Activation('relu'))
-model.add(Dropout(0.25))
-model.add(Dense(MAX_CAPTCHA*CHAR_SET_LEN))
-model.add(Activation('softmax'))
+# Second pooling layer.
+with tf.name_scope('pool2'):
+h_pool2 = max_pool_2x2(h_conv2)
 
-model.compile(loss='categorical_crossentropy',
-              optimizer='adadelta',
-              metrics=['accuracy'])
+# Fully connected layer 1 
+with tf.name_scope('fc1'):
+rows = IMG_ROWS//(pool_size[0]**nb_pools)
+cols = IMG_COLS//(pool_size[1]**nb_pools)
+W_fc1 = weight_variable([rows * cols * nb_filters[-1], D_out[0]])
+b_fc1 = bias_variable([D_out[0]])
+
+h_pool2_flat = tf.reshape(h_pool2, [-1, rows*cols*nb_filters[-1]])
+h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
+
+# Dropout - controls the complexity of the model, prevents co-adaptation of
+# features.
+with tf.name_scope('dropout'):
+keep_prob = tf.placeholder(tf.float32)
+h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
+
+# Map the feactures to the classes
+with tf.name_scope('fc2'):
+W_fc2 = weight_variable([D_out[0], D_out[1]])
+b_fc2 = bias_variable([D_out[1]])
+
+y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
 ```
+# File structure
 
 # The training result    
 I use 18000 training samples and 6000 test samples. After 64 epochs of training, the model obtains the correct rate of 97.91% on the test data.There is part of the result following:    
@@ -60,7 +74,7 @@ We can see the program successfully recognize "4063" , but fail "7229". The chat
 
 # Try yourself
 ## Environment
-My Environment is Mac with Anaconda. Anaconda should install the package tensorflow,keras and capthca.
+My Environment is Windows with Anaconda. Anaconda should install the package tensorflow and capthca.
 ## Run my program
 - get_captcha.py: Generate the sample captchas
 - captcha_train.py: Train the model

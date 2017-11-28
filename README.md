@@ -14,7 +14,7 @@ There three main methods:
 Tesseract OCR and OpenCV use the second method. But the captcha is more and more complex now. There is a common phenomenon that the chars in the captcha interlace with one another, so the second method gets a low accuracy. This program focuses on the third method. 
 
 # Generate the captcha to train
-Acquire massive capthca by hunman is unrealistic. Fortunately, we can easily generate the captcha by the python package **captcha**.See the [get_train_set.py](https://github.com/scnuhealthy/cnn_keras_captcha/blob/master/code/get_train_set.py) in details.
+Acquire massive capthca by hunman is unrealistic. Fortunately, we can easily generate the captcha by the python package **captcha**.See the [get_train_set.py](https://github.com/scnuhealthy/Tensorflow_Captcha/blob/master/get_train_set.py) in details.
 
 # Build the cnn model with tensorflow
 I have another [project](https://github.com/scnuhealthy/cnn_keras_captcha) to achieve this with keras. In this project, I use tensorflow, for its scalability and prospect. The network includes two convolution layers and two full-connected layers. The charset includes digital numbers and the alphabet(only lowercase letters).
@@ -63,23 +63,30 @@ b_fc2 = bias_variable([D_out[1]])
 y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
 ```
 # File structure
+captcha_params_and_cfg.py: The file to 
+get_train_set.py:
+load_data.py
+predict.py
+train.py
+
 
 # The training result    
-I use 18000 training samples and 6000 test samples. After 64 epochs of training, the model obtains the correct rate of 97.91% on the test data.There is part of the result following:    
+I use 60000 training samples and 10000 test samples. At the 23 epoch of training, the trainging error is almost zero. After 50 epochs of training, the model obtains the correct rate of 97.91% on the test data.There is part of the result following:    
 
 ![test_result](https://github.com/scnuhealthy/cnn_keras_captcha/blob/master/picture/test_result.jpg)  
 ![4063](https://github.com/scnuhealthy/cnn_keras_captcha/blob/master/picture/9_4063.jpg)    
 ![7229](https://github.com/scnuhealthy/cnn_keras_captcha/blob/master/picture/15_7229.jpg)   
 We can see the program successfully recognize "4063" , but fail "7229". The chat '7' and '2' are similar, maybe we need more data to train.
 
+# Why I rewrite this project with tensorflow?
+Keras is not flexible. We can define new loss function, activation function in Tensorflow. The one reason is to practice. And the other is the captcha regonize projects in github done with tensorflow are not clear enough. And I have the confident that my code is easy for beginners to understand.
+
 # Try yourself
 ## Environment
 My Environment is Windows with Anaconda. Anaconda should install the package tensorflow and capthca.
 ## Run my program
-- get_captcha.py: Generate the sample captchas
-- captcha_train.py: Train the model
-- eval_test.py: Solve an image 
-```
-	python eval_test.py data/50_7136.png
-```
+- get_train_set.py: Generate the sample captchas
+- train.py: Train the model
+- predict.py: Solve an image 
+If your computer has not enough memory, you can just let char set only including digital numbers and reduce the size of the training set.
 It works pretty well in order to solve captcha created from other libraries such phpcaptcha or using letters and more than 4 characters :)

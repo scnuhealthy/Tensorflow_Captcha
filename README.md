@@ -71,7 +71,7 @@ train.py
 
 
 # The result    
-I use 60000 training samples and 10000 test samples. At the 23 epoch of training, the trainging error is almost zero. After 50 epochs of training, the model obtains the correct rate of 96.95% on the test data.There is part of the result following:    
+I use 60000 training samples and 10000 test samples. At the 23 epoch of training, the trainging error is almost zero. After 50 epochs of training, the model obtains the correct rate of 96.95% on the test data.There is part of the result following,where labels 0-9 represent digital numbers and labels 10-35 represent the lowercase letters:   
 
 ![trainging_accuracy](https://github.com/scnuhealthy/Tensorflow_Captcha/blob/master/traiing_accuracy.png)  
 ![predict_result](https://github.com/scnuhealthy/Tensorflow_Captcha/blob/master/predict_result.png)

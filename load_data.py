@@ -1,4 +1,5 @@
 # Author:kemo
+# This file is to load the data from the data set
 
 import os
 from PIL import Image
@@ -7,8 +8,6 @@ import random
 import captcha_params_and_cfg
 
 np.random.seed(1337)
-
-# load_data.py and captcha_recognition.py we need to define the MAX_CAPTCHA,the CHAR_SET_LEN ,the tol_num,the train_num and the parameters of the model
 
 # the length of the captcha text
 MAX_CAPTCHA = captcha_params_and_cfg.get_captcha_size()
@@ -56,10 +55,8 @@ def text2vec(text):
 
 def load_data_predict(tol_num):
       
-    # input,tol_num: the numbers of all samples(train and test)
-    # input,train_num: the numbers of training samples
-    # output,(X_train,y_train):trainging data
-    # ouput,(X_test,y_test):test data
+    # input : the numbers of samples
+    # output: the data and the labels of the samples
  
     data = np.empty((tol_num, 1, height, width),dtype="float32")
     label = np.empty((tol_num,Y_LEN),dtype="uint8")
@@ -129,7 +126,6 @@ def load_image(img):
     data[0,:,:,:] = arr
     return data
 
-
 def pre_process_image(img):
     img = img.convert('L')
     # Resize it.
@@ -138,26 +134,6 @@ def pre_process_image(img):
     return img
 
 
-def get_x_input_from_file(img):
-    with open(fileName, mode='rb') as file: # b is important -> binary
-        fileContent = file.read()
 
-    stream = io.BytesIO(r_data)
-
-    img = Image.open(stream)
-
-    X_test = get_x_input_from_image(img)
-
-    return X_test
-
-def get_x_input_from_image(img):
-    X_test = load_image(img)
-
-    X_test = X_test.reshape(X_test.shape[0], height, width, 1)
-
-    X_test = X_test.astype('float32')
-    X_test /= 255
-
-    return X_test
 
 

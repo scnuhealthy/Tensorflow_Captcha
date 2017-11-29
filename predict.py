@@ -1,3 +1,6 @@
+# Author: Kemo Ho
+# This file to load some samples and predict
+
 import tensorflow as tf
 from load_data import *
 import captcha_params_and_cfg
@@ -24,6 +27,8 @@ Y_predict = Y_predict.reshape(Y_predict.shape[0],MAX_CAPTCHA,CHAR_SET_LEN)
 
 saver = tf.train.Saver()
 with tf.Session() as sess:
+	
+	# load the trained model
 	try:
 		model_file=tf.train.latest_checkpoint(captcha_params_and_cfg.model_path)
 		saver.restore(sess, model_file)
@@ -31,6 +36,7 @@ with tf.Session() as sess:
 	except:
 		print('No trained model!')
 		exit()
+	# predict and compare the results with the true label
 	for i in range(X_predict.shape[0]):
 		predict_result = sess.run(predict, feed_dict={x: [X_predict[i]], keep_prob: 1})
 		predict_result = predict_result[0]

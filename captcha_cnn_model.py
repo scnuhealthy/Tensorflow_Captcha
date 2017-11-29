@@ -1,3 +1,6 @@
+# Author: Kemo Ho
+# THis file is to build the CNN network
+
 import captcha_params_and_cfg
 import tensorflow as tf
 
@@ -6,10 +9,11 @@ CHAR_SET_LEN = captcha_params_and_cfg.get_char_set_len()
 
 IMG_ROWS, IMG_COLS = captcha_params_and_cfg.get_height(), captcha_params_and_cfg.get_width()
 
-nb_filters = (32,64)
+
+nb_filters = (32,64)                   # number of filters
 D_out = (512,MAX_CAPTCHA*CHAR_SET_LEN) # output_dim_fully_connected_layers
-pool_size = (2, 2)
-kernel_size = (3, 3)
+pool_size = (2, 2)                     # pool size
+kernel_size = (3, 3)                   # kernel size
 nb_pools = 2
 
 FLAGS = None
@@ -18,18 +22,18 @@ def deepnn(x):
   """deepnn builds the graph for a deep net for classifying digits.
 
   Args:
-    x: an input tensor with the dimensions (N_examples, 784), where 784 is the
-    number of pixels in a standard MNIST image.
+    x: an input tensor with the dimensions (N_examples, IMG_ROWS*IMG_COLS)
 
   Returns:
-    A tuple (y, keep_prob). y is a tensor of shape (N_examples, 10), with values
-    equal to the logits of classifying the digit into one of 10 classes (the
+    A tuple (y, keep_prob). y is a tensor of shape (N_examples, MAX_CAPTCHA*CHAR_SET_LEN), with values
+    equal to the logits of classifying the digit into one of MAX_CAPTCHA*CHAR_SET_LEN classes 
+	(if CHAR_SET is digital number and the number of elements in a captcha is one, the classes will be 
     digits 0-9). keep_prob is a scalar placeholder for the probability of
     dropout.
   """
   # Reshape to use within a convolutional neural net.
-  # Last dimension is for "features" - there is only one here, since images are
-  # grayscale -- it would be 3 for an RGB image, 4 for RGBA, etc.
+  # Last dimension is for "features" - there is only one here, assuming that images have been 
+  # transformed into grayscale -- it would be 3 for an RGB image, 4 for RGBA, etc.
   with tf.name_scope('reshape'):
     x_image = tf.reshape(x, [-1, IMG_ROWS, IMG_COLS, 1])
 
@@ -53,8 +57,7 @@ def deepnn(x):
   with tf.name_scope('pool2'):
     h_pool2 = max_pool_2x2(h_conv2)
 
-  # Fully connected layer 1 -- after 2 round of downsampling, our 28x28 image
-  # is down to 7x7x64 feature maps -- maps this to 1024 features.
+  # Fully connected layer 1 -- after 2 round of downsampling, maps this to 1024 features.
   with tf.name_scope('fc1'):
     rows = IMG_ROWS//(pool_size[0]**nb_pools)
     print(rows)
@@ -71,7 +74,7 @@ def deepnn(x):
     keep_prob = tf.placeholder(tf.float32)
     h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
 
-  # Map the 1024 features to 10 classes, one for each digit
+  # Map the 1024 features to MAX_CAPTCHA*CHAR_SET_LEN classes, one for each situation
   with tf.name_scope('fc2'):
     W_fc2 = weight_variable([D_out[0], D_out[1]])
     b_fc2 = bias_variable([D_out[1]])

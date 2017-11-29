@@ -1,3 +1,6 @@
+# Author: Kemo Ho
+# This file is to get the data set for training
+
 from captcha.image import ImageCaptcha  # pip install captcha
 import numpy as np
 import matplotlib.pyplot as plt
@@ -6,8 +9,6 @@ import random
 import os
 import captcha_params_and_cfg
 
-# height_p = 60
-# width_p = 120
 
 # generate  the captcha text randomly from the char lists above
 def random_captcha_text(char_set=captcha_params_and_cfg.get_char_set(), captcha_size=captcha_params_and_cfg.get_captcha_size()):
@@ -37,18 +38,9 @@ def gen_captcha_text_and_image(i):
 	captcha_image = np.array(captcha_image)
 	return captcha_text, captcha_image
  
+# You just need to input the size of the data set
 if __name__ == '__main__':
-
-        
-        for i in range(24000):     
+     
+        for i in range(70000):     
                 text, image = gen_captcha_text_and_image(i)
 
-        # show the image
-        '''
-	f = plt.figure()
-	ax = f.add_subplot(111)
-	ax.text(0.1, 0.9,text, ha='center', va='center', transform=ax.transAxes)
-	plt.imshow(image)
- 
-	plt.show()
-        '''

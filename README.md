@@ -70,13 +70,11 @@ predict.py
 train.py
 
 
-# The training result    
-I use 60000 training samples and 10000 test samples. At the 23 epoch of training, the trainging error is almost zero. After 50 epochs of training, the model obtains the correct rate of 97.91% on the test data.There is part of the result following:    
+# The result    
+I use 60000 training samples and 10000 test samples. At the 23 epoch of training, the trainging error is almost zero. After 50 epochs of training, the model obtains the correct rate of 96.95% on the test data.There is part of the result following:    
 
-![test_result](https://github.com/scnuhealthy/cnn_keras_captcha/blob/master/picture/test_result.jpg)  
-![4063](https://github.com/scnuhealthy/cnn_keras_captcha/blob/master/picture/9_4063.jpg)    
-![7229](https://github.com/scnuhealthy/cnn_keras_captcha/blob/master/picture/15_7229.jpg)   
-We can see the program successfully recognize "4063" , but fail "7229". The chat '7' and '2' are similar, maybe we need more data to train.
+![trainging_accuracy](https://github.com/scnuhealthy/Tensorflow_Captcha/blob/master/traiing_accuracy.png)  
+![predict_result](https://github.com/scnuhealthy/Tensorflow_Captcha/blob/master/predict_result.png)
 
 # Why I rewrite this project with tensorflow?
 Keras is not flexible. We can define new loss function, activation function in Tensorflow. The one reason is to practice. And the other is the captcha regonize projects in github done with tensorflow are not clear enough. And I have the confident that my code is easy for beginners to understand.

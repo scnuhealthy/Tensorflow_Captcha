@@ -63,11 +63,11 @@ b_fc2 = bias_variable([D_out[1]])
 y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
 ```
 # File structure
-captcha_params_and_cfg.py: The file to 
-get_train_set.py:
-load_data.py
-predict.py
-train.py
+captcha_params_and_cfg.py: This file is to define the paths, captcha parameters and other configuration
+get_train_set.py: This file is to get the data set for training
+load_data.py: This file is to load the data from the data set
+predict.py: This file to load some samples and predict
+train.py: This file is to train the model with the networks builded in captcha_cnn_model.py
 
 
 # The result    

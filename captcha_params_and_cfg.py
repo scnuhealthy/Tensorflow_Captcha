@@ -34,7 +34,7 @@ def get_width():
 def get_height():
     return HEIGHT
 
-model_path = './tmp'
+model_path = './model'
 model_tag = 'captcha4.model'
 save_model = os.path.join(model_path, model_tag) # the path to save the trained model
-data_path = './data3'                            # the data path 
+data_path = 'data3'                            # the data path 

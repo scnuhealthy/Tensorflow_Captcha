@@ -23,7 +23,9 @@ def generatebatch(X,Y,n_examples, batch_size):
         yield batch_xs, batch_ys 
 
 # Import data
-(X_train, Y_train), (X_test, Y_test) = load_data(tol_num = 70000,train_num = 60000)
+print("loading data")
+(X_train, Y_train), (X_test, Y_test) = load_data(tol_num = 24000,train_num = 20000)
+print("loading finished")
 X_train = X_train.reshape(X_train.shape[0],IMG_ROWS,IMG_COLS,1)
 X_test = X_test.reshape(X_test.shape[0],IMG_ROWS,IMG_COLS,1)[:1000]
 X_train /=255

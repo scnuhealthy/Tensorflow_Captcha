@@ -41,6 +41,6 @@ def gen_captcha_text_and_image(i):
 # You just need to input the size of the data set
 if __name__ == '__main__':
      
-        for i in range(2000):     
+        for i in range(60000):     
                 text, image = gen_captcha_text_and_image(i)
 

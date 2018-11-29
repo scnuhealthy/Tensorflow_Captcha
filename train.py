@@ -24,13 +24,13 @@ def generatebatch(X,Y,n_examples, batch_size):
 
 # Import data
 print("loading data")
-(X_train, Y_train), (X_test, Y_test) = load_data(tol_num = 24000,train_num = 20000)
+(X_train, Y_train), (X_test, Y_test) = load_data(tol_num = 59900,train_num = 59600)
 print("loading finished")
 X_train = X_train.reshape(X_train.shape[0],IMG_ROWS,IMG_COLS,1)
-X_test = X_test.reshape(X_test.shape[0],IMG_ROWS,IMG_COLS,1)[:1000]
+X_test = X_test.reshape(X_test.shape[0],IMG_ROWS,IMG_COLS,1)[:150]
 X_train /=255
 X_test /=255
-Y_test = Y_test[:1000]
+Y_test = Y_test[:150]
 
 batch_size = 100
 
@@ -51,7 +51,7 @@ with tf.name_scope('loss'):
 cross_entropy = tf.reduce_mean(cross_entropy)
 
 with tf.name_scope('adam_optimizer'):
-  optimizer = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
+  optimizer = tf.train.AdamOptimizer(4e-5).minimize(cross_entropy)
 
 # Define accuracy
 with tf.name_scope('accuracy'):
@@ -79,11 +79,12 @@ with tf.Session() as sess:
 	
 	# Training
 	j = 0
-	for i in range(50):
+	for i in range(60):
 		
 		# input all the samples batch by batch
 		for batch_xs,batch_ys in generatebatch(X_train,Y_train,Y_train.shape[0],batch_size): 
-			sess.run([optimizer,cross_entropy],feed_dict={x: batch_xs, y_: batch_ys, keep_prob: 0.95})
+			_,loss = sess.run([optimizer,cross_entropy],feed_dict={x: batch_xs, y_: batch_ys, keep_prob: 0.95})
+                        print('loss:',loss)
 			if j % 40 ==0:
 				train_accuracy = accuracy.eval(feed_dict={
 					x: batch_xs, y_:batch_ys, keep_prob: 1.0})

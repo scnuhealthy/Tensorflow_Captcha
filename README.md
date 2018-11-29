@@ -82,6 +82,10 @@ Keras is not flexible. We can define new loss function, activation function in T
 # Try yourself
 ## Environment
 My Environment is Windows with Anaconda. Anaconda should install the package tensorflow and capthca.
+
+# Pretrained model Download
+trained on 20000 captchas: https://1drv.ms/f/s!ArJ7K9H1C8nbiA2N26KTqPxea7nU
+
 ## Run my program
 - get_train_set.py: Generate the sample captchas
 - train.py: Train the model
